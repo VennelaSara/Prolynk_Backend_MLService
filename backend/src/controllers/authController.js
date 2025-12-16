@@ -1,7 +1,9 @@
-const User = require("../models/User");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+// controllers/authController.js
+import User from "../models/User.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
+// Generate JWT token
 const generateToken = (user) => {
   return jwt.sign(
     { id: user._id, role: user.role, email: user.email },
@@ -12,7 +14,8 @@ const generateToken = (user) => {
   );
 };
 
-exports.register = async (req, res) => {
+// Register a new user
+export const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
     if (!name || !email || !password)
@@ -26,24 +29,23 @@ exports.register = async (req, res) => {
     const user = await User.create({ name, email, password: hashed, role });
     const token = generateToken(user);
 
-    res
-      .status(201)
-      .json({
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        },
-        token,
-      });
+    res.status(201).json({
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+      token,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-exports.login = async (req, res) => {
+// Login existing user
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });

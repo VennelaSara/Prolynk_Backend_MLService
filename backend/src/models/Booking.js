@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+// models/Booking.js
+import mongoose from "mongoose";
 
 const bookingSchema = new mongoose.Schema({
   service: {
@@ -18,11 +19,11 @@ const bookingSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["pending", "accepted", "completed", "cancelled"],
+    enum: ["pending", "accepted", "completed", "cancelled", "rejected"],
     default: "pending",
   },
   scheduledAt: { type: Date, required: true },
   createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model("Booking", bookingSchema);
+export default mongoose.model("Booking", bookingSchema);

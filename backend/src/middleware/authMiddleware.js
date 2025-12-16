@@ -1,10 +1,15 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+// middleware/authMiddleware.js
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
-exports.protect = async (req, res, next) => {
+/**
+ * Protect routes (verify JWT)
+ */
+export const protect = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer "))
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "Authorization required" });
+  }
 
   const token = authHeader.split(" ")[1];
 
@@ -14,12 +19,15 @@ exports.protect = async (req, res, next) => {
     if (!req.user) return res.status(401).json({ message: "User not found" });
     next();
   } catch (err) {
-    console.error("Auth middleware error", err);
+    console.error("Auth middleware error:", err);
     res.status(401).json({ message: "Token invalid or expired" });
   }
 };
 
-exports.authorize =
+/**
+ * Authorize roles (e.g., admin, merchant, customer)
+ */
+export const authorize =
   (...roles) =>
   (req, res, next) => {
     if (!req.user)

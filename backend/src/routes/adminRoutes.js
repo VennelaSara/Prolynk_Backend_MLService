@@ -1,27 +1,32 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const { protect, authorize } = require("../middleware/authMiddleware");
-const {
+
+// Middleware imports
+import { protect, authorize } from "../middleware/authMiddleware.js";
+
+// Controller imports
+import {
   getAllUsers,
   deleteUser,
   getAllServices,
   deleteService,
   getAllBookings,
   deleteBooking,
-} = require("../controllers/adminController");
+} from "../controllers/adminController.js";
 
+// Protect all admin routes
 router.use(protect, authorize("admin"));
 
-// Users
+// Users routes
 router.get("/users", getAllUsers);
 router.delete("/users/:id", deleteUser);
 
-// Services
+// Services routes
 router.get("/services", getAllServices);
 router.delete("/services/:id", deleteService);
 
-// Bookings
+// Bookings routes
 router.get("/bookings", getAllBookings);
 router.delete("/bookings/:id", deleteBooking);
 
-module.exports = router;
+export default router;

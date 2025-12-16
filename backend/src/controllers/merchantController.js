@@ -1,8 +1,12 @@
-const Service = require("../models/Service");
-const Booking = require("../models/Booking");
+// controllers/merchantController.js
+import Service from "../models/Service.js";
+import Booking from "../models/Booking.js";
 
-// Get all services created by logged-in merchant
-exports.getMyServices = async (req, res) => {
+/**
+ * Get all services created by logged-in merchant
+ * GET /api/merchant/services
+ */
+export const getMyServices = async (req, res) => {
   try {
     const services = await Service.find({ merchant: req.user._id });
     res.json(services);
@@ -12,8 +16,11 @@ exports.getMyServices = async (req, res) => {
   }
 };
 
-// Get all bookings for logged-in merchant
-exports.getMyBookings = async (req, res) => {
+/**
+ * Get all bookings for logged-in merchant
+ * GET /api/merchant/bookings
+ */
+export const getMyBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({ merchant: req.user._id })
       .populate("service", "title category price")
@@ -27,8 +34,11 @@ exports.getMyBookings = async (req, res) => {
   }
 };
 
-// Update booking status for this merchant's booking
-exports.updateBookingStatus = async (req, res) => {
+/**
+ * Update booking status for this merchant's booking
+ * PUT /api/merchant/bookings/:id/status
+ */
+export const updateBookingStatus = async (req, res) => {
   try {
     const { status } = req.body;
     const booking = await Booking.findById(req.params.id);

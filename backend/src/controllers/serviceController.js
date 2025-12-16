@@ -1,8 +1,8 @@
-//
-const Service = require("../models/Service");
+// controllers/serviceController.js
+import Service from "../models/Service.js";
 
 // ---------------- CREATE SERVICE (Merchant only) ----------------
-exports.createService = async (req, res) => {
+export async function createService(req, res) {
   try {
     const { title, description, category, price } = req.body;
 
@@ -25,10 +25,10 @@ exports.createService = async (req, res) => {
     console.error("Create Service Error:", err);
     res.status(500).json({ message: "Server error" });
   }
-};
+}
 
 // ---------------- GET ALL SERVICES (Public) ----------------
-exports.getServices = async (req, res) => {
+export async function getServices(req, res) {
   try {
     const { category, title } = req.query;
     const filter = {};
@@ -48,10 +48,10 @@ exports.getServices = async (req, res) => {
     console.error("Get Services Error:", err);
     res.status(500).json({ message: "Server error" });
   }
-};
+}
 
 // ---------------- GET SERVICE BY ID ----------------
-exports.getServiceById = async (req, res) => {
+export async function getServiceById(req, res) {
   try {
     const service = await Service.findById(req.params.id)
       .populate("merchant", "name email")
@@ -66,10 +66,10 @@ exports.getServiceById = async (req, res) => {
     console.error("Get Service By ID Error:", err);
     res.status(500).json({ message: "Server error" });
   }
-};
+}
 
 // ---------------- UPDATE SERVICE (Merchant only) ----------------
-exports.updateService = async (req, res) => {
+export async function updateService(req, res) {
   try {
     const service = await Service.findById(req.params.id);
     if (!service) {
@@ -93,10 +93,10 @@ exports.updateService = async (req, res) => {
     console.error("Update Service Error:", err);
     res.status(500).json({ message: "Server error" });
   }
-};
+}
 
 // ---------------- DELETE SERVICE (Merchant/Admin) ----------------
-exports.deleteService = async (req, res) => {
+export async function deleteService(req, res) {
   try {
     const service = await Service.findById(req.params.id);
     if (!service) {
@@ -116,10 +116,10 @@ exports.deleteService = async (req, res) => {
     console.error("Delete Service Error:", err);
     res.status(500).json({ message: "Server error" });
   }
-};
+}
 
 // ---------------- ADD RATING & COMMENT (Customer only) ----------------
-exports.addRating = async (req, res) => {
+export async function addRating(req, res) {
   try {
     const { rating, comment } = req.body;
 
@@ -134,7 +134,7 @@ exports.addRating = async (req, res) => {
       return res.status(404).json({ message: "Service not found" });
     }
 
-    // prevent duplicate rating
+    // Prevent duplicate rating
     const alreadyRated = service.ratings.find(
       (r) => r.user.toString() === req.user._id.toString()
     );
@@ -148,7 +148,7 @@ exports.addRating = async (req, res) => {
       comment,
     });
 
-    // recalc average rating
+    // Recalculate average rating
     service.averageRating =
       service.ratings.reduce((sum, r) => sum + r.rating, 0) /
       service.ratings.length;
@@ -160,4 +160,4 @@ exports.addRating = async (req, res) => {
     console.error("Add Rating Error:", err);
     res.status(500).json({ message: "Server error" });
   }
-};
+}

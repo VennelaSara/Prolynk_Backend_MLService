@@ -1,15 +1,18 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const { protect, authorize } = require("../middleware/authMiddleware");
 
-const {
+// Middleware imports (ES module)
+import { protect, authorize } from "../middleware/authMiddleware.js";
+
+// Controller imports (ES module)
+import {
   createService,
   getServices,
   getServiceById,
   updateService,
   deleteService,
   addRating,
-} = require("../controllers/serviceController");
+} from "../controllers/serviceController.js";
 
 // ---------------- PUBLIC ----------------
 router.get("/", getServices);
@@ -23,4 +26,4 @@ router.delete("/:id", protect, authorize("merchant", "admin"), deleteService);
 // ---------------- CUSTOMER ----------------
 router.post("/:id/rate", protect, authorize("customer"), addRating);
 
-module.exports = router;
+export default router;

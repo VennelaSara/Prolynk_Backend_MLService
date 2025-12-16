@@ -12,7 +12,7 @@ app = Flask(__name__)
 CORS(app)
 
 # ---------------- Globals ----------------
-# MONGODB_URI = <.....>
+MONGODB_URI = "mongodb+srv://prolynk:prolynk100@myatlasclusteredu.nzuko.mongodb.net/test?retryWrites=true&w=majority"
 client = MongoClient(MONGODB_URI)
 db = client["test"]  # your database name in MongoDB Atlas
 

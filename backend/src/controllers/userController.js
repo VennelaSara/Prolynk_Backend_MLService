@@ -1,8 +1,9 @@
-const User = require("../models/User");
-const bcrypt = require("bcryptjs");
+// controllers/userController.js
+import User from "../models/User.js";
+import bcrypt from "bcryptjs";
 
 // Get all users (Admin only)
-exports.getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password");
     res.json(users);
@@ -13,7 +14,7 @@ exports.getAllUsers = async (req, res) => {
 };
 
 // Get user by ID (Admin only)
-exports.getUserById = async (req, res) => {
+export const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("-password");
     if (!user) return res.status(404).json({ message: "User not found" });
@@ -25,7 +26,7 @@ exports.getUserById = async (req, res) => {
 };
 
 // Update user (Admin or self)
-exports.updateUser = async (req, res) => {
+export const updateUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
@@ -34,8 +35,9 @@ exports.updateUser = async (req, res) => {
     if (
       req.user.role !== "admin" &&
       req.user._id.toString() !== user._id.toString()
-    )
+    ) {
       return res.status(403).json({ message: "Not authorized" });
+    }
 
     const { name, email, password, role } = req.body;
     if (name) user.name = name;
@@ -60,12 +62,12 @@ exports.updateUser = async (req, res) => {
 };
 
 // Delete user (Admin only)
-exports.deleteUser = async (req, res) => {
+export const deleteUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    await user.remove();
+    await user.deleteOne();
     res.json({ message: "User deleted" });
   } catch (err) {
     console.error(err);

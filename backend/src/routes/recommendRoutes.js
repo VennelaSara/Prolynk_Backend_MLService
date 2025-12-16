@@ -1,8 +1,10 @@
-// src/routes/recommendRoutes.js
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const { recommendServices } = require("../controllers/recommendController");
 
+// Controller imports (ES module)
+import { recommendServices } from "../controllers/recommendController.js";
+
+// Recommendation route
 router.post("/", recommendServices);
 
-module.exports = router;
+export default router;

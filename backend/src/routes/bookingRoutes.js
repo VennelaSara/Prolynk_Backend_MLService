@@ -1,21 +1,25 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const { protect, authorize } = require("../middleware/authMiddleware");
-const {
+
+// Middleware imports (ES module)
+import { protect, authorize } from "../middleware/authMiddleware.js";
+
+// Controller imports (ES module)
+import {
   createBooking,
   getMyBookings,
   getMerchantBookings,
   updateBookingStatus,
   deleteBooking,
   getAllBookings,
-} = require("../controllers/bookingController");
+} from "../controllers/bookingController.js";
 
-// Customer
+// Customer routes
 router.post("/", protect, authorize("customer"), createBooking);
 router.get("/my", protect, authorize("customer"), getMyBookings);
 router.delete("/:id", protect, authorize("customer", "admin"), deleteBooking);
 
-// Merchant
+// Merchant routes
 router.get("/merchant", protect, authorize("merchant"), getMerchantBookings);
 router.put(
   "/:id/status",
@@ -24,7 +28,7 @@ router.put(
   updateBookingStatus
 );
 
-// Admin
+// Admin routes
 router.get("/", protect, authorize("admin"), getAllBookings);
 
-module.exports = router;
+export default router;

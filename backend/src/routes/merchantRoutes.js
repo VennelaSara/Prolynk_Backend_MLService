@@ -1,11 +1,15 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const { protect, authorize } = require("../middleware/authMiddleware");
-const {
+
+// Middleware imports (ES module)
+import { protect, authorize } from "../middleware/authMiddleware.js";
+
+// Controller imports (ES module)
+import {
   getMyServices,
   getMyBookings,
   updateBookingStatus,
-} = require("../controllers/merchantController");
+} from "../controllers/merchantController.js";
 
 // All routes are protected and merchant-only
 router.use(protect, authorize("merchant"));
@@ -19,4 +23,4 @@ router.get("/bookings", getMyBookings);
 // Update booking status
 router.put("/bookings/:id/status", updateBookingStatus);
 
-module.exports = router;
+export default router;
